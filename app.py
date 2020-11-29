@@ -83,7 +83,6 @@ class Main(tk.Frame):
 
         pass
 
-    @staticmethod
     def openGerarLoginContent(self):
         view = tk.Toplevel(self.master)
         GerarLoginContent(view)
