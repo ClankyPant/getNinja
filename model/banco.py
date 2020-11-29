@@ -1,26 +1,24 @@
 import sqlite3
-from Utils.DataBaseUtils import DataBaseUtils
+from Utils.dataBaseUtils import DataBaseUtils
 
 
 class Banco:
 
-    def __init__(self):
-        self.createTables()
+    @staticmethod
+    def createConnection():
+        return sqlite3.connect(DataBaseUtils.ABSOLUTE_PATH)
 
-    def createTables(self):
+    @staticmethod
+    def createTables():
         try:
-            con = self.createConnection()
-            con.cursor()
+            con = Banco.createConnection()
+            cursor = con.cursor()
 
-            # c.execute(DataBaseUtils.CREATE_FUNCIONARIO)
-            con.execute(DataBaseUtils.CREATE_USER)
+            cursor.execute(DataBaseUtils.CREATE_FUNCIONARIO)
+            cursor.execute(DataBaseUtils.CREATE_USER)
 
             con.commit()
             con.close()
 
         except sqlite3.Error as error:
             print("Erro ao conectar no SQLite", error)
-
-    @staticmethod
-    def createConnection():
-        return sqlite3.connect(DataBaseUtils.ABSOLUTE_PATH)
