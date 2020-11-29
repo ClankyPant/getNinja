@@ -3,9 +3,9 @@ import sqlite3
 import pandas
 from tkinter import messagebox
 from model.banco import Banco
-from Utils.StringUtils import StringUtils
-from Utils.Utils import Utils
-from Utils.DataBaseUtils import DataBaseUtils
+from Utils.stringUtils import StringUtils
+from Utils.utils import Utils
+from Utils.dataBaseUtils import DataBaseUtils
 
 
 class GerarLoginContent(tk.Frame):
