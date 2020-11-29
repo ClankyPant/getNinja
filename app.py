@@ -1,6 +1,6 @@
 import sqlite3
 import tkinter as tk
-from views.loginContent import GerarLoginContent
+from views.gerarLoginADMContent import GerarLoginContent
 from views.cadFuncionariosContent import CadFuncionariosContent
 from Utils.stringUtils import StringUtils
 from Utils.utils import Utils
@@ -71,8 +71,23 @@ class Main(tk.Frame):
         self.frContainer_5 = Utils.createDefaultFrame(master=self.master, padX=20, padY=5)
 
         self.btnGerarLogin = tk.Button(self.frContainer_5, text="Gerar Login ADM", width=23, font=StringUtils.MAIN_FONT,
-                                       command=self.gerarLoginOpenView)
+                                       command=self.openGerarLoginContent)
         self.btnGerarLogin.pack()
+
+        pass
+
+    def openCadFuncionario(self):
+        frameCadFuncionario = tk.Frame()
+        frameCadFuncionario.pack(fill="both", expand=1)
+        CadFuncionariosContent(frameCadFuncionario)
+
+        pass
+
+    @staticmethod
+    def openGerarLoginContent(self):
+        view = tk.Toplevel(self.master)
+        GerarLoginContent(view)
+        pass
 
     def buildMainScreenMenus(self):
         mainMenuBar = tk.Menu(self.master)
@@ -88,13 +103,6 @@ class Main(tk.Frame):
 
         pass
 
-    def openCadFuncionario(self):
-        frameCadFuncionario = tk.Frame()
-        frameCadFuncionario.pack(fill="both", expand=1)
-        CadFuncionariosContent(frameCadFuncionario)
-
-        pass
-
     def logar(self):
         try:
             conn = Banco.createConnection()
@@ -104,17 +112,14 @@ class Main(tk.Frame):
             if cursor.fetchone():
                 self.destroyLoginFields()
                 self.buildMainScreenMenus()
+            else:
+                tk.messagebox.showinfo("Aviso!", "Usuario não encontrado, ou credencial incorreta!")
 
             conn.commit()
             conn.close()
         except sqlite3.Error as e:
             print("Erro..:", e)
 
-        pass
-
-    def gerarLoginOpenView(self):
-        view = tk.Toplevel(self.master)
-        GerarLoginContent(view)
         pass
 
     def destroyLoginFields(self):
