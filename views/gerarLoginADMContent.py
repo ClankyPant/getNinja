@@ -19,19 +19,19 @@ class GerarLoginContent(tk.Frame):
 
     def buildUI(self):
         # Container 1
-        frContainer_1 = Utils.createDefaultFrame(master=self.master, padX=10, padY=20)
+        frContainer_1 = Utils.createDefaultFrame(master=self.master, padx=10, pady=20)
 
         lbCodigo = tk.Label(frContainer_1, text="Codigo ADM", font=StringUtils.MAIN_FONT)
         lbCodigo.pack()
 
         # Container 2
-        frContainer_2 = Utils.createDefaultFrame(master=self.master, padX=10, padY=20)
+        frContainer_2 = Utils.createDefaultFrame(master=self.master, padx=10, pady=20)
 
         tryCodigo = tk.Entry(frContainer_2, font=StringUtils.MAIN_FONT, show="*")
         tryCodigo.pack()
 
         # Container 3
-        ftContainer_3 = Utils.createDefaultFrame(master=self.master, padX=10, padY=20)
+        ftContainer_3 = Utils.createDefaultFrame(master=self.master, padx=10, pady=20)
 
         btnGerarLogin = tk.Button(ftContainer_3, text="Gerar Login", font=StringUtils.MAIN_FONT, command=lambda: self.gerarLogin(codigo=tryCodigo.get()))
         btnGerarLogin.pack()

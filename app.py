@@ -31,13 +31,13 @@ class Main(tk.Frame):
 
     def buildUI(self):
         # Container 1
-        self.frContainer_1 = Utils.createDefaultFrame(master=self.master, padX=20, padY=20)
+        self.frContainer_1 = Utils.createDefaultFrame(master=self.master, padx=20, pady=20)
 
         self.lbTitle = tk.Label(self.frContainer_1, text="GetNinja", font=StringUtils.MAIN_FONT)
         self.lbTitle.pack()
 
         # Container 2
-        self.frContainer_2 = Utils.createDefaultFrame(master=self.master, padX=10, padY=20)
+        self.frContainer_2 = Utils.createDefaultFrame(master=self.master, padx=10, pady=20)
 
         self.lbLogin = tk.Label(self.frContainer_2, text="Login", font=StringUtils.MAIN_FONT)
         self.lbLogin["width"] = 5
@@ -49,7 +49,7 @@ class Main(tk.Frame):
         self.loginField.pack(side=tk.LEFT)
 
         # Container 3
-        self.trContainer_3 = Utils.createDefaultFrame(master=self.master, padX=20, padY=5)
+        self.trContainer_3 = Utils.createDefaultFrame(master=self.master, padx=20, pady=5)
 
         self.lbSenha = tk.Label(self.trContainer_3, text="Senha", font=StringUtils.MAIN_FONT)
         self.lbSenha["width"] = 5
@@ -61,14 +61,14 @@ class Main(tk.Frame):
         self.senhaField.pack(side=tk.LEFT)
 
         # Container 4
-        self.frContainer_4 = Utils.createDefaultFrame(master=self.master, padX=20, padY=5)
+        self.frContainer_4 = Utils.createDefaultFrame(master=self.master, padx=20, pady=5)
 
         self.btnLogin = tk.Button(self.frContainer_4, text="Login", font=StringUtils.MAIN_FONT, width=23,
                                   command=self.logar)
         self.btnLogin.pack()
 
         # Container 5
-        self.frContainer_5 = Utils.createDefaultFrame(master=self.master, padX=20, padY=5)
+        self.frContainer_5 = Utils.createDefaultFrame(master=self.master, padx=20, pady=5)
 
         self.btnGerarLogin = tk.Button(self.frContainer_5, text="Gerar Login ADM", width=23, font=StringUtils.MAIN_FONT,
                                        command=self.openGerarLoginContent)
@@ -77,8 +77,7 @@ class Main(tk.Frame):
         pass
 
     def openCadFuncionario(self):
-        frameCadFuncionario = tk.Frame()
-        frameCadFuncionario.pack(fill="both", expand=1)
+        frameCadFuncionario = tk.Toplevel(self.master)
         CadFuncionariosContent(frameCadFuncionario)
 
         pass
