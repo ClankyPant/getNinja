@@ -10,6 +10,9 @@ class DataBaseUtils:
     INSERT_USER_ROOT = """INSERT INTO usuarios (id, nome, login, senha, isRoot) 
         values (1, 'admin', 'admin', '123', 1);"""
 
+    INSERT_FUNCIONARIO = """INSERT INTO funcionarios (nome, cnpjCpf, dataFundacao, cargo, salario)
+                            VALUES (:p1, :p2, :p3, :p4, :p5);"""
+
     SELECT_USER_ROOT = "SELECT id FROM usuarios WHERE isRoot = 1"
 
     SELECT_USER_BY_LOGIN = "SELECT id FROM usuarios WHERE login = :p1 AND senha = :p2"

@@ -1,8 +1,10 @@
 import tkinter as tk
+import sqlite3
 from tkcalendar import DateEntry
 from Utils.utils import Utils
 from Utils.stringUtils import StringUtils
-import pandas
+from Utils.dataBaseUtils import DataBaseUtils
+from model.banco import Banco
 
 
 class CadFuncionariosContent(tk.Frame):
@@ -91,7 +93,7 @@ class CadFuncionariosContent(tk.Frame):
             "Outros"
         ]
         selectedOption = tk.StringVar()
-        selectedOption.set(options[len(options)-1])
+        selectedOption.set(options[len(options) - 1])
         cpTipoFunc = tk.OptionMenu(frContainer_6, selectedOption, *options)
         cpTipoFunc["width"] = 25
         cpTipoFunc.pack()
@@ -100,9 +102,12 @@ class CadFuncionariosContent(tk.Frame):
         frContainer_7 = Utils.createDefaultFrame(self.master, padx=10, pady=20)
 
         btnCadastrar = tk.Button(frContainer_7, text="Cadastrar Funcionario",
-                                 command=lambda: self.cadastrarFuncionario(nome=cpNomeFunc.get(), cnpjCpf=cpCNPJCPF.get(),
-                                                                           telefone=cpTelefone.get(), salario=cpSalario.get(),
-                                                                           dataFundacao=cpDateFunc.get(), tipoFuncionario=selectedOption.get()))
+                                 command=lambda: self.cadastrarFuncionario(nome=cpNomeFunc.get(),
+                                                                           cnpjCpf=cpCNPJCPF.get(),
+                                                                           telefone=cpTelefone.get(),
+                                                                           salario=cpSalario.get(),
+                                                                           dataFundacao=cpDateFunc.get(),
+                                                                           tipoFuncionario=selectedOption.get()))
         btnCadastrar.pack()
 
         pass
@@ -110,14 +115,33 @@ class CadFuncionariosContent(tk.Frame):
     def cadastrarFuncionario(self, nome, cnpjCpf, telefone, salario, dataFundacao, tipoFuncionario):
         try:
             if salario == '':
-                self.showMsg("Aviso!", "Campos de sálario precisa ser informado!")
+                Utils.showMsg("Aviso!", "Campos de sálario precisa ser informado!")
                 return
 
+            validCnpjCpf = str(cnpjCpf).replace("-", "").replace(".", "").replace("/", "")
+            if len(validCnpjCpf) > 14:
+                Utils.showMsg("Aviso!", "CNPJ/CPF configurado de forma incorreta!")
+                return
+
+            conn = Banco.createConnection()
+
+            cursor = conn.cursor()
+            cursor.execute(DataBaseUtils.INSERT_FUNCIONARIO, {
+                "p1": nome,
+                "p2": cnpjCpf,
+                "p3": dataFundacao,
+                "p4": tipoFuncionario,
+                "p5": salario
+            })
+            conn.commit()
+            conn.close()
 
         except ValueError as e:
-            self.showMsg("Aviso!", "Campo de sálario aceita apenas valores numericos.")
-        pass
+            Utils.showMsg("Aviso!", "Campo de sálario aceita apenas valores numericos.")
+        except sqlite3.Error as error:
+            print(error)
+            Utils.showMsg("Error!", "Erro ao acessar o banco de dados.")
+        finally:
+            Utils.showMsg("Sucesso!", "Funcionario cadastrado com sucesso!")
 
-    @staticmethod
-    def showMsg(title, value):
-        tk.messagebox.showinfo(title, value)
+        pass

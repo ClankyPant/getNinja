@@ -138,7 +138,7 @@ class Main(tk.Frame):
 if __name__ == '__main__':
     t = Banco.createTables()
     root = tk.Tk()
-    root.title("Sistema de RH")
+    root.title("Sistema de CRUD")
     root.geometry("850x450")
 
     Main(master=root)

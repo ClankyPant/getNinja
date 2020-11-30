@@ -10,3 +10,7 @@ class Utils:
         container["pady"] = pady
         container.pack()
         return container
+
+    @staticmethod
+    def showMsg(title, value):
+        tk.messagebox.showinfo(title, value)
