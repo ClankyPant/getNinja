@@ -7,141 +7,69 @@ from Utils.dataBaseUtils import DataBaseUtils
 from model.banco import Banco
 
 
-class CadFuncionariosContent(tk.Frame):
+class CadFuncionariosContent:
 
     def __init__(self, master=None):
         self.master = master
         self.master.title("Cadastro de Clientes")
-        self.master.geometry("500x500")
+        self.master.geometry("750x500")
         self.buildUI()
 
     def buildUI(self):
-        # Container 1
-        frContainer_1 = Utils.createDefaultFrame(self.master, padx=10, pady=20)
+        lb_nome_cliente = tk.Label(self.master, text="Nome Cliente")
+        lb_nome_cliente.grid(row=0, column=0, ipadx=75, ipady=10)
 
-        lbNome = tk.Label(frContainer_1, text="Nome Funcionario ", font=StringUtils.MAIN_FONT)
-        lbNome["width"] = 15
-        lbNome["anchor"] = tk.NW
-        lbNome.pack(side=tk.LEFT)
+        cp_nome_cliente = tk.Entry(self.master)
+        cp_nome_cliente.grid(row=0, column=1)
 
-        cpNomeFunc = tk.Entry(frContainer_1, font=StringUtils.MAIN_FONT)
-        cpNomeFunc["width"] = 25
-        cpNomeFunc.pack(side=tk.LEFT)
+        lb_sexo = tk.Label(self.master, text="Sexo")
+        lb_sexo.grid(row=1, column=0, ipadx=75, ipady=10)
 
-        # Container 2
-        frContainer_2 = Utils.createDefaultFrame(self.master, padx=10, pady=20)
-
-        lbCNPJ = tk.Label(frContainer_2, text="CNPJ/CPF ", font=StringUtils.MAIN_FONT)
-        lbCNPJ["width"] = 15
-        lbCNPJ["anchor"] = tk.NW
-        lbCNPJ.pack(side=tk.LEFT)
-
-        cpCNPJCPF = tk.Entry(frContainer_2, font=StringUtils.MAIN_FONT)
-        cpCNPJCPF["width"] = 25
-        cpCNPJCPF.pack(side=tk.LEFT)
-
-        # Container 3
-        frContainer_3 = Utils.createDefaultFrame(self.master, padx=10, pady=20)
-
-        lbTelefone = tk.Label(frContainer_3, text="Telefone ", font=StringUtils.MAIN_FONT)
-        lbTelefone["width"] = 15
-        lbTelefone["anchor"] = tk.NW
-        lbTelefone.pack(side=tk.LEFT)
-
-        cpTelefone = tk.Entry(frContainer_3, font=StringUtils.MAIN_FONT)
-        cpTelefone["width"] = 25
-        cpTelefone.pack(side=tk.LEFT)
-
-        # Container 4
-        frContainer_4 = Utils.createDefaultFrame(self.master, padx=10, pady=20)
-
-        lbSalario = tk.Label(frContainer_4, text="Salario ", font=StringUtils.MAIN_FONT)
-        lbSalario["width"] = 15
-        lbSalario["anchor"] = tk.NW
-        lbSalario.pack(side=tk.LEFT)
-
-        cpSalario = tk.Entry(frContainer_4, font=StringUtils.MAIN_FONT)
-        cpSalario["width"] = 25
-        cpSalario.pack(side=tk.LEFT)
-
-        # Container 5
-        frContainer_5 = Utils.createDefaultFrame(self.master, padx=10, pady=20)
-
-        lbDateFunc = tk.Label(frContainer_5, text="Data Fundação ", font=StringUtils.MAIN_FONT)
-        lbDateFunc["width"] = 15
-        lbDateFunc["anchor"] = tk.NW
-        lbDateFunc.pack(side=tk.LEFT)
-
-        cpDateFunc = DateEntry(frContainer_5)
-        cpDateFunc["width"] = 30
-        cpDateFunc.pack(side=tk.LEFT)
-
-        # Container 6
-        frContainer_6 = Utils.createDefaultFrame(self.master, padx=10, pady=20)
-
-        lbTipoFuncionario = tk.Label(frContainer_6, text="Tipo Funcionario ", font=StringUtils.MAIN_FONT)
-        lbTipoFuncionario["width"] = 15
-        lbTipoFuncionario["anchor"] = tk.NW
-        lbTipoFuncionario.pack(side=tk.LEFT)
-
-        options = [
-            "Atendente",
-            "Consultor",
-            "RH",
-            "Vendedor",
-            "Técnico TI",
-            "Outros"
+        sex_options = [
+            "M",
+            "F"
         ]
-        selectedOption = tk.StringVar()
-        selectedOption.set(options[len(options) - 1])
-        cpTipoFunc = tk.OptionMenu(frContainer_6, selectedOption, *options)
-        cpTipoFunc["width"] = 25
-        cpTipoFunc.pack()
-
-        # Container 7
-        frContainer_7 = Utils.createDefaultFrame(self.master, padx=10, pady=20)
-
-        btnCadastrar = tk.Button(frContainer_7, text="Cadastrar Funcionario",
-                                 command=lambda: self.cadastrarFuncionario(nome=cpNomeFunc.get(),
-                                                                           cnpjCpf=cpCNPJCPF.get(),
-                                                                           telefone=cpTelefone.get(),
-                                                                           salario=cpSalario.get(),
-                                                                           dataFundacao=cpDateFunc.get(),
-                                                                           tipoFuncionario=selectedOption.get()))
-        btnCadastrar.pack()
+        selected_option_sexo = tk.StringVar()
+        selected_option_sexo.set(sex_options[0])
+        cp_sexo = tk.OptionMenu(self.master, selected_option_sexo, *sex_options)
+        cp_sexo['width'] = 15
+        cp_sexo.grid(row=1, column=1)
 
         pass
 
-    def cadastrarFuncionario(self, nome, cnpjCpf, telefone, salario, dataFundacao, tipoFuncionario):
-        try:
-            if salario == '':
-                Utils.showMsg("Aviso!", "Campos de sálario precisa ser informado!")
-                return
-
-            validCnpjCpf = str(cnpjCpf).replace("-", "").replace(".", "").replace("/", "")
-            if len(validCnpjCpf) > 14:
-                Utils.showMsg("Aviso!", "CNPJ/CPF configurado de forma incorreta!")
-                return
-
-            conn = Banco.createConnection()
-
-            cursor = conn.cursor()
-            cursor.execute(DataBaseUtils.INSERT_FUNCIONARIO, {
-                "p1": nome,
-                "p2": cnpjCpf,
-                "p3": dataFundacao,
-                "p4": tipoFuncionario,
-                "p5": salario
-            })
-            conn.commit()
-            conn.close()
-
-        except ValueError as e:
-            Utils.showMsg("Aviso!", "Campo de sálario aceita apenas valores numericos.")
-        except sqlite3.Error as error:
-            print(error)
-            Utils.showMsg("Error!", "Erro ao acessar o banco de dados.")
-        finally:
-            Utils.showMsg("Sucesso!", "Funcionario cadastrado com sucesso!")
-
-        pass
+    # def cadastrarFuncionario(self, nome, sexo, qtdDependentes, salario, dataAdmissao, setorFunc):
+    #     msgAviso = None
+    #     try:
+    #         # Alterações e validações
+    #
+    #         setorFunc = setorFunc[0:3] # Pegando apenas o código do setor
+    #         float(salario) # Validando se o valor é float.
+    #         int(qtdDependentes) # Validando se o valor é int.
+    #
+    #         if salario == '':
+    #             msgAviso = "Campos de sálario precisa ser informado!"
+    #             return
+    #
+    #         conn = Banco.createConnection()
+    #
+    #         cursor = conn.cursor()
+    #         cursor.execute(DataBaseUtils.INSERT_FUNCIONARIO, {
+    #             "p1": nome,
+    #             "p2": sexo,
+    #             "p3": qtdDependentes,
+    #             "p4": salario,
+    #             "p5": dataAdmissao,
+    #             "p6": setorFunc
+    #         })
+    #         conn.commit()
+    #         conn.close()
+    #
+    #     except ValueError as e:
+    #         msgAviso = "Campo de sálario e Qtd de dependentes aceita apenas valores numericos."
+    #     except sqlite3.Error as error:
+    #         print(error)
+    #         msgAviso = "Erro ao acessar o banco de dados."
+    #     finally:
+    #         Utils.showMsg("Aviso!", msgAviso)
+    #
+    #     pass
