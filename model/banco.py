@@ -14,8 +14,9 @@ class Banco:
             con = Banco.createConnection()
             cursor = con.cursor()
 
-            cursor.execute(DataBaseUtils.CREATE_FUNCIONARIO)
+            cursor.execute(DataBaseUtils.CREATE_CLIENTE)
             cursor.execute(DataBaseUtils.CREATE_USER)
+            cursor.execute(DataBaseUtils.CREATE_GRUPO)
 
             con.commit()
             con.close()

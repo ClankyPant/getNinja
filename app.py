@@ -1,7 +1,8 @@
 import sqlite3
 import tkinter as tk
-from views.gerarLoginADMContent import GerarLoginContent
-from views.cadFuncionariosContent import CadFuncionariosContent
+from views.gerarLoginADMView import GerarLoginContent
+from views.cadClienteView import CadFuncionariosContent
+from views.cadGrupoView import CadGrupoView
 from Utils.stringUtils import StringUtils
 from Utils.utils import Utils
 from Utils.dataBaseUtils import DataBaseUtils
@@ -94,10 +95,17 @@ class Main(tk.Frame):
         registerMenu = tk.Menu(mainMenuBar)
         mainMenuBar.add_cascade(label="Cadastros", menu=registerMenu)
         registerMenu.add_command(label="Cadastro de Cliente", command=self.openCadFuncionario)
+        registerMenu.add_command(label="Cadastro de Grupos", command=self.open_cad_grupos)
 
         optionMenu = tk.Menu(mainMenuBar)
         mainMenuBar.add_cascade(label="Opções", menu=optionMenu)
         optionMenu.add_command(label="Exit", command=self.master.quit)
+
+        pass
+
+    def open_cad_grupos(self):
+        view = tk.Toplevel(self.master)
+        CadGrupoView(view)
 
         pass
 
