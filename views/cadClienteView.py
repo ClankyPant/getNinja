@@ -29,7 +29,7 @@ class CadFuncionariosContent:
         cp_nome_cliente = tk.Entry(self.master)
         cp_nome_cliente.grid(row=1, column=1)
 
-        lb_cnpj_cliente = tk.Label(self.master, text="CNPJ")
+        lb_cnpj_cliente = tk.Label(self.master, text="CNPJ/CPF")
         lb_cnpj_cliente.grid(row=2, column=0, ipadx=75, ipady=10)
 
         cp_cnpj_cliente = tk.Entry(self.master)
@@ -86,7 +86,7 @@ class CadFuncionariosContent:
     def excluir_cliente(self, id_cliente):
         msg_aviso = "Cliente deletado com sucesso!!"
         try:
-            if (id_cliente == ''):
+            if id_cliente == '':
                 msg_aviso = "ID precisa estar preenchido"
                 return
 
