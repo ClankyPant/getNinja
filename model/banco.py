@@ -16,8 +16,7 @@ class Banco:
 
             cursor.execute(DataBaseUtils.CREATE_CLIENTE)
             cursor.execute(DataBaseUtils.CREATE_USER)
-            cursor.execute(DataBaseUtils.CREATE_GRUPO)
-
+            
             con.commit()
             con.close()
 

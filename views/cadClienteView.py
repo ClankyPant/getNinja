@@ -6,7 +6,6 @@ from Utils.utils import Utils
 from Utils.stringUtils import StringUtils
 from Utils.dataBaseUtils import DataBaseUtils
 from model.banco import Banco
-import pandas
 
 
 class CadFuncionariosContent:
@@ -68,7 +67,7 @@ class CadFuncionariosContent:
         self.btn_excluir.grid(row=5, column=1)
         self.btn_atualizar.grid(row=5, column=2)
 
-        self.tree_main.grid(row=6, column=0, columnspan=10)
+        self.tree_main.grid(row=6, column=0, padx=50, pady=50, columnspan=10)
 
         pass
 
@@ -81,11 +80,11 @@ class CadFuncionariosContent:
         cod_grupo = self.cp_grupo_cliente.get()
 
         try:
+            conn = Banco.createConnection()
 
             if self.flagOnConsulta:
                 msg_aviso = "Você precisa limpar os campos antes de cadastrar um novo cliente!"
                 return
-            conn = Banco.createConnection()
 
             cursor = conn.cursor()
             cursor.execute(DataBaseUtils.INSERT_CLIENTE, {
@@ -95,7 +94,6 @@ class CadFuncionariosContent:
                 "p4": cod_grupo
             })
             conn.commit()
-
 
         except ValueError as e:
             msg_aviso = "Campo de sálario e Qtd de dependentes aceita apenas valores numericos."
@@ -113,6 +111,7 @@ class CadFuncionariosContent:
         msg_aviso = "Cliente deletado com sucesso!!"
         id_cliente = self.cp_id_cliente.get()
         try:
+            conn = Banco.createConnection()
 
             if id_cliente == '':
                 msg_aviso = "ID precisa estar preenchido"
@@ -120,8 +119,6 @@ class CadFuncionariosContent:
             elif not self.flagOnConsulta:
                 msg_aviso = "Você precisa primeiro consultar um cliente"
                 return
-
-            conn = Banco.createConnection()
 
             cursor = conn.cursor()
             cursor.execute(DataBaseUtils.DELETE_CLIENTE, {
@@ -142,13 +139,15 @@ class CadFuncionariosContent:
 
     def buscar_cliente(self):
         id_cliente = self.cp_id_cliente.get()
+        is_busca_sucesso = True
         self.limpar_campos()
         try:
+            conn = Banco.createConnection()
+
             if id_cliente == '':
                 Utils.showMsg("Aviso!", "ID precisa estar preenchido")
+                is_busca_sucesso = False
                 return
-
-            conn = Banco.createConnection()
 
             cursor = conn.cursor()
             cursor.execute(DataBaseUtils.SELECT_CLIENTE_BY_ID, {
@@ -164,15 +163,17 @@ class CadFuncionariosContent:
                 self.cp_grupo_cliente.insert(0, rows[3])
             else:
                 Utils.showMsg("Aviso!", "Cliente não encontrado!")
+                is_busca_sucesso = False
 
-            conn.close()
         except sqlite3.Error as error:
             print(error)
         finally:
-            self.flagOnConsulta = True
-            self.cp_id_cliente.config(state="readonly")
-            self.btn_limpar.config(state="active")
-            self.btn_atualizar.config(state="active")
+            conn.close()
+            if is_busca_sucesso:
+                self.flagOnConsulta = True
+                self.cp_id_cliente.config(state="readonly")
+                self.btn_limpar.config(state="active")
+                self.btn_atualizar.config(state="active")
         pass
 
     def atualizar_cliente(self):
