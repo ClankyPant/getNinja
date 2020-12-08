@@ -1,6 +1,7 @@
 import datetime
 import pandas
 
+
 class DescontoFiel():
     __data_primeira_compra = None
 
