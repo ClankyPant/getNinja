@@ -21,7 +21,7 @@ class CadFuncionariosContent:
         self.lb_nome_cliente = tk.Label(self.master, text="Nome Cliente")
         self.lb_cnpj_cliente = tk.Label(self.master, text="CNPJ/CPF")
         self.lb_telefone_cliente = tk.Label(self.master, text="Telefone")
-        self.lb_data_fundacao = tk.Label(self.master, text="Data Fundação")
+        self.lb_data_fundacao = tk.Label(self.master, text="Data Primeira Compra")
 
         # CAMPOS
         self.cp_id_cliente = tk.Entry(self.master, width=10)
