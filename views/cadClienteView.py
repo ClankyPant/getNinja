@@ -13,7 +13,7 @@ class CadFuncionariosContent:
     def __init__(self, master=None):
         self.master = master
         self.master.title("Cadastro de Clientes")
-        self.master.geometry("750x650")
+        self.master.geometry("850x650")
         self.flagOnConsulta = False
 
         # LABELS
@@ -220,19 +220,20 @@ class CadFuncionariosContent:
         pass
 
     def buildTree(self):
-        self.tree_main['columns'] = ("id", "Nome", "CNPJ", "Telefone", "DataPrimeiraCompra")
-        # self.tree_main.column("#0", width=125, anchor=tk.N)
+        self.tree_main['columns'] = ("id", "Nome", "CNPJ", "Telefone", "DataPrimeiraCompra", "PercDesconto")
         self.tree_main.column("id", width=50, anchor=tk.N)
         self.tree_main.column("Nome", width=125, anchor=tk.N)
-        self.tree_main.column("Telefone", width=125, anchor=tk.N)
+        self.tree_main.column("Telefone", width=100, anchor=tk.N)
         self.tree_main.column("CNPJ", width=125, anchor=tk.N)
         self.tree_main.column("DataPrimeiraCompra", width=125, anchor=tk.N)
+        self.tree_main.column("PercDesconto", width=125, anchor=tk.N)
 
         self.tree_main.heading("id", text="ID")
         self.tree_main.heading("Nome", text="Nome Cliente")
         self.tree_main.heading("Telefone", text=" CNPJ/CPF")
         self.tree_main.heading("CNPJ", text="Telefone")
-        self.tree_main.heading("DataPrimeiraCompra", text="Dt. Primeira Compra")
+        self.tree_main.heading("DataPrimeiraCompra", text="Primeira Compra")
+        self.tree_main.heading("PercDesconto", text="Perc. Desconto")
 
         self.refresh_tree()
         pass
@@ -259,8 +260,11 @@ class CadFuncionariosContent:
                                                                                         listCliente[idx].get_nome(),
                                                                                         listCliente[idx].get_telefone(),
                                                                                         listCliente[idx].get_cnpj_cpf(),
-                                                                                        listCliente[idx].get_data_primeira_compra()))
-                idx+=1
+                                                                                        listCliente[idx].get_data_primeira_compra(),
+                                                                                        listCliente[idx].get_perc_desconto() + "%"))
+
+                idx += 1
+
                 pass
 
             conn.close()
