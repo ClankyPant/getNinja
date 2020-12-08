@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from tkcalendar import Calendar, DateEntry
 import sqlite3
 from utils.utils import Utils
 from utils.dataBaseUtils import DataBaseUtils
@@ -12,7 +13,7 @@ class CadFuncionariosContent:
     def __init__(self, master=None):
         self.master = master
         self.master.title("Cadastro de Clientes")
-        self.master.geometry("750x750")
+        self.master.geometry("750x650")
         self.flagOnConsulta = False
 
         # LABELS
@@ -20,19 +21,20 @@ class CadFuncionariosContent:
         self.lb_nome_cliente = tk.Label(self.master, text="Nome Cliente")
         self.lb_cnpj_cliente = tk.Label(self.master, text="CNPJ/CPF")
         self.lb_telefone_cliente = tk.Label(self.master, text="Telefone")
-        self.lb_grupo_cliente = tk.Label(self.master, text="Código Grupo")
+        self.lb_data_fundacao = tk.Label(self.master, text="Data Fundação")
 
         # CAMPOS
         self.cp_id_cliente = tk.Entry(self.master, width=10)
         self.cp_nome_cliente = tk.Entry(self.master)
         self.cp_cnpj_cliente = tk.Entry(self.master)
         self.cp_telefone_cliente = tk.Entry(self.master)
-        self.cp_grupo_cliente = tk.Entry(self.master)
+        self.cp_data_primeira_compra = DateEntry(self.master, width=19)
 
         # BUTTONS
         self.btn_buscar = tk.Button(self.master, text="Buscar", command=self.buscar_cliente)
         self.btn_cadastrar = tk.Button(self.master, text="Cadastrar", command=self.cadastra_cliente)
         self.btn_excluir = tk.Button(self.master, text="Excluir", command=self.excluir_cliente)
+        self.btn_excluir.config(state="disable")
         self.btn_limpar = tk.Button(self.master, text="Limpar", command=self.limpar_campos)
         self.btn_limpar.config(state="disable")
         self.btn_atualizar = tk.Button(self.master, text="Atualizar", command=self.atualizar_cliente)
@@ -59,8 +61,8 @@ class CadFuncionariosContent:
         self.lb_telefone_cliente.grid(row=3, column=0, ipadx=75, ipady=10)
         self.cp_telefone_cliente.grid(row=3, column=1)
 
-        self.lb_grupo_cliente.grid(row=4, column=0, ipadx=75, ipady=10)
-        self.cp_grupo_cliente.grid(row=4, column=1)
+        self.lb_data_fundacao.grid(row=4, column=0, ipadx=75, ipady=10)
+        self.cp_data_primeira_compra.grid(row=4, column=1)
 
         self.btn_cadastrar.grid(row=5, ipadx=25, column=0, columnspan=3)
         self.btn_excluir.grid(row=5, ipadx=25, column=1, columnspan=2)
@@ -76,7 +78,7 @@ class CadFuncionariosContent:
         nome = self.cp_nome_cliente.get()
         cnpj = self.cp_cnpj_cliente.get()
         telefone = self.cp_telefone_cliente.get()
-        cod_grupo = self.cp_grupo_cliente.get()
+        cod_grupo = self.cp_data_primeira_compra.get()
 
         try:
             conn = Banco.createConnection()
@@ -96,7 +98,7 @@ class CadFuncionariosContent:
                 "p4": cod_grupo
             })
             conn.commit()
-
+            self.limpar_campos()
         except ValueError as e:
             msg_aviso = "Campo de sálario e Qtd de dependentes aceita apenas valores numericos."
         except sqlite3.Error as error:
@@ -162,7 +164,7 @@ class CadFuncionariosContent:
                 self.cp_nome_cliente.insert(0, rows[0])
                 self.cp_telefone_cliente.insert(0, rows[1])
                 self.cp_cnpj_cliente.insert(0, rows[2])
-                self.cp_grupo_cliente.insert(0, rows[3])
+                self.cp_data_primeira_compra.insert(0, rows[3])
             else:
                 Utils.showMsg("Aviso!", "Cliente não encontrado!")
                 is_busca_sucesso = False
@@ -175,6 +177,7 @@ class CadFuncionariosContent:
                 self.flagOnConsulta = True
                 self.cp_id_cliente.config(state="readonly")
                 self.btn_limpar.config(state="active")
+                self.btn_excluir.config(state="active")
                 self.btn_atualizar.config(state="active")
         pass
 
@@ -191,7 +194,7 @@ class CadFuncionariosContent:
                 "p1": self.cp_nome_cliente.get(),
                 "p2": self.cp_telefone_cliente.get(),
                 "p3": self.cp_cnpj_cliente.get(),
-                "p4": self.cp_grupo_cliente.get(),
+                "p4": self.cp_data_primeira_compra.get(),
                 "p5": self.cp_id_cliente.get(),
             })
             conn.commit()
@@ -207,28 +210,29 @@ class CadFuncionariosContent:
         self.cp_nome_cliente.delete(0, 'end')
         self.cp_cnpj_cliente.delete(0, 'end')
         self.cp_telefone_cliente.delete(0, 'end')
-        self.cp_grupo_cliente.delete(0, 'end')
+        self.cp_data_primeira_compra.delete(0, 'end')
         self.flagOnConsulta = False
         self.btn_limpar.config(state="disable")
         self.btn_atualizar.config(state="disable")
+        self.btn_excluir.config(state="disable")
         self.cp_id_cliente.config(state="normal")
         self.cp_id_cliente.delete(0, 'end')
         pass
 
     def buildTree(self):
-        self.tree_main['columns'] = ("id", "Nome", "CNPJ", "Telefone", "CodGrupo")
+        self.tree_main['columns'] = ("id", "Nome", "CNPJ", "Telefone", "DataPrimeiraCompra")
         # self.tree_main.column("#0", width=125, anchor=tk.N)
-        self.tree_main.column("id", width=125, anchor=tk.N)
+        self.tree_main.column("id", width=50, anchor=tk.N)
         self.tree_main.column("Nome", width=125, anchor=tk.N)
         self.tree_main.column("Telefone", width=125, anchor=tk.N)
         self.tree_main.column("CNPJ", width=125, anchor=tk.N)
-        self.tree_main.column("CodGrupo", width=125, anchor=tk.N)
+        self.tree_main.column("DataPrimeiraCompra", width=125, anchor=tk.N)
 
         self.tree_main.heading("id", text="ID")
         self.tree_main.heading("Nome", text="Nome Cliente")
         self.tree_main.heading("Telefone", text=" CNPJ/CPF")
         self.tree_main.heading("CNPJ", text="Telefone")
-        self.tree_main.heading("CodGrupo", text="Cód. Grupo")
+        self.tree_main.heading("DataPrimeiraCompra", text="Dt. Primeira Compra")
 
         self.refresh_tree()
         pass
@@ -250,12 +254,12 @@ class CadFuncionariosContent:
             listCliente = []
             idx = 0
             for row in rows:
-                listCliente.insert(idx, Cliente(id=row[0], nome=row[1], telefone=row[2], cnpj_cpf=row[3], cod_grupo=row[4]))
+                listCliente.insert(idx, Cliente(id=row[0], nome=row[1], telefone=row[2], cnpj_cpf=row[3], data_primeira_compra=row[4]))
                 self.tree_main.insert(parent='', index='end', iid=idx, text='', values=(listCliente[idx].get_id(),
                                                                                         listCliente[idx].get_nome(),
                                                                                         listCliente[idx].get_telefone(),
                                                                                         listCliente[idx].get_cnpj_cpf(),
-                                                                                        listCliente[idx].get_cod_grupo()))
+                                                                                        listCliente[idx].get_data_primeira_compra()))
                 idx+=1
                 pass
 

@@ -1,14 +1,14 @@
-from src.cliente.grupoCliente import GrupoCliente
+from src.cliente.descontoFiel import DescontoFiel
 
 
-class Cliente(GrupoCliente):
+class Cliente(DescontoFiel):
     __id = None
     __nome = None
     __cnpj_cpf = None
     __telefone = None
 
-    def __init__(self, id, nome, cnpj_cpf, telefone, cod_grupo):
-        super().__init__(cod_grupo)
+    def __init__(self, id, nome, cnpj_cpf, telefone, data_primeira_compra):
+        super().__init__(data_primeira_compra)
         self.__id = id
         self.__nome = nome
         self.__cnpj_cpf = cnpj_cpf
