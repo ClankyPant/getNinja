@@ -1,10 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 import sqlite3
-from tkcalendar import DateEntry
-from Utils.utils import Utils
-from Utils.stringUtils import StringUtils
-from Utils.dataBaseUtils import DataBaseUtils
+from utils.utils import Utils
+from utils.dataBaseUtils import DataBaseUtils
 from model.banco import Banco
 
 
@@ -49,7 +47,7 @@ class CadFuncionariosContent:
         self.lb_id_cliente .grid(row=0, column=0, ipadx=75, ipady=10)
         self.cp_id_cliente.grid(row=0, column=1, padx=15, sticky=tk.E)
         self.btn_buscar.grid(row=0, column=2, sticky=tk.W+tk.E)
-        self.btn_limpar.grid(row=0, column=3, sticky=tk.W + tk.E)
+        self.btn_limpar.grid(row=0, column=3, sticky=tk.W+tk.E)
 
         self.lb_nome_cliente.grid(row=1, column=0, ipadx=75, ipady=10)
         self.cp_nome_cliente.grid(row=1, column=1)
@@ -63,9 +61,9 @@ class CadFuncionariosContent:
         self.lb_grupo_cliente.grid(row=4, column=0, ipadx=75, ipady=10)
         self.cp_grupo_cliente.grid(row=4, column=1)
 
-        self.btn_cadastrar.grid(row=5, column=0)
-        self.btn_excluir.grid(row=5, column=1)
-        self.btn_atualizar.grid(row=5, column=2)
+        self.btn_cadastrar.grid(row=5, ipadx=25, column=0, columnspan=3)
+        self.btn_excluir.grid(row=5, ipadx=25, column=1, columnspan=2)
+        self.btn_atualizar.grid(row=5, ipadx=25, column=2, columnspan=2)
 
         self.tree_main.grid(row=6, column=0, padx=50, pady=50, columnspan=10)
 
@@ -85,6 +83,9 @@ class CadFuncionariosContent:
             if self.flagOnConsulta:
                 msg_aviso = "Você precisa limpar os campos antes de cadastrar um novo cliente!"
                 return
+            elif cnpj == '' or nome == '':
+                msg_aviso = "Ao menos o nome e CNPJ precisam estar preenchidos para cadastro!"
+                return
 
             cursor = conn.cursor()
             cursor.execute(DataBaseUtils.INSERT_CLIENTE, {
@@ -103,7 +104,7 @@ class CadFuncionariosContent:
         finally:
             conn.close()
             Utils.showMsg("Aviso!", msg_aviso)
-            self.buildTree()
+            self.refresh_tree()
 
         pass
 
@@ -132,7 +133,7 @@ class CadFuncionariosContent:
         finally:
             conn.close()
             self.limpar_campos()
-            self.buildTree()
+            self.refresh_tree()
             Utils.showMsg("Aviso!", msg_aviso)
 
         pass
@@ -198,7 +199,7 @@ class CadFuncionariosContent:
             print(error)
         finally:
             Utils.showMsg("Aviso!", "Cliente atualizado com sucesso!")
-            self.buildTree()
+            self.refresh_tree()
         pass
 
     def limpar_campos(self):
@@ -215,18 +216,24 @@ class CadFuncionariosContent:
 
     def buildTree(self):
         self.tree_main['columns'] = ("id", "Nome", "CNPJ", "Telefone", "CodGrupo")
+        # self.tree_main.column("#0", width=125, anchor=tk.N)
         self.tree_main.column("id", width=125, anchor=tk.N)
         self.tree_main.column("Nome", width=125, anchor=tk.N)
         self.tree_main.column("CNPJ", width=125, anchor=tk.N)
         self.tree_main.column("Telefone", width=125, anchor=tk.N)
         self.tree_main.column("CodGrupo", width=125, anchor=tk.N)
 
+        # self.tree_main.heading("#0", text='label', anchor=tk.W)
         self.tree_main.heading("id", text="ID")
         self.tree_main.heading("Nome", text="Nome Cliente")
         self.tree_main.heading("CNPJ", text=" CNPJ/CPF")
         self.tree_main.heading("Telefone", text="Telefone")
         self.tree_main.heading("CodGrupo", text="Cód. Grupo")
 
+        self.refresh_tree()
+        pass
+
+    def refresh_tree(self):
         try:
             conn = Banco.createConnection()
 
@@ -240,6 +247,7 @@ class CadFuncionariosContent:
                 self.tree_main.delete(i)
 
             # Adicionando todos os clientes existentes
+
             for row in rows:
                 self.tree_main.insert(parent='', index='end', iid=row[0], text='', values=(row[0], row[1], row[2], row[3], row[4]))
                 pass
@@ -248,5 +256,4 @@ class CadFuncionariosContent:
 
         except sqlite3.Error as error:
             print(error)
-
         pass

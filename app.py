@@ -2,9 +2,9 @@ import sqlite3
 import tkinter as tk
 from views.gerarLoginADMView import GerarLoginContent
 from views.cadClienteView import CadFuncionariosContent
-from Utils.stringUtils import StringUtils
-from Utils.utils import Utils
-from Utils.dataBaseUtils import DataBaseUtils
+from utils.stringUtils import StringUtils
+from utils.utils import Utils
+from utils.dataBaseUtils import DataBaseUtils
 from model.banco import Banco
 
 

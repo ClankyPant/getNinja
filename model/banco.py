@@ -1,5 +1,5 @@
 import sqlite3
-from Utils.dataBaseUtils import DataBaseUtils
+from utils.dataBaseUtils import DataBaseUtils
 
 
 class Banco:
@@ -16,7 +16,7 @@ class Banco:
 
             cursor.execute(DataBaseUtils.CREATE_CLIENTE)
             cursor.execute(DataBaseUtils.CREATE_USER)
-            
+
             con.commit()
             con.close()
 
