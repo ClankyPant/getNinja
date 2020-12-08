@@ -2,19 +2,21 @@ from src.cliente.grupoCliente import GrupoCliente
 
 
 class Cliente(GrupoCliente):
+    __id = None
     __nome = None
     __cnpj_cpf = None
     __telefone = None
 
-    def __init__(self, nome, cnpj_cpf, telefone, cod_grupo, nome_grupo, cod_cliente_pai):
-        super().__init__(cod_grupo, nome_grupo, cod_cliente_pai)
+    def __init__(self, id, nome, cnpj_cpf, telefone, cod_grupo):
+        super().__init__(cod_grupo)
+        self.__id = id
         self.__nome = nome
         self.__cnpj_cpf = cnpj_cpf
         self.__telefone = telefone
         pass
 
-    def __int__(self, nome, cnpj_cpf, telefone):
-
+    def set_id(self, id):
+        self.__id = id
         pass
 
     def set_nome(self, nome):
@@ -40,5 +42,8 @@ class Cliente(GrupoCliente):
     def get_telefone(self):
         return self.__telefone
         pass
+
+    def get_id(self):
+        return self.__id
 
     pass

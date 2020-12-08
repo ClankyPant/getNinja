@@ -3,6 +3,7 @@ from tkinter import ttk
 import sqlite3
 from utils.utils import Utils
 from utils.dataBaseUtils import DataBaseUtils
+from src.cliente.cliente import Cliente
 from model.banco import Banco
 
 
@@ -219,15 +220,14 @@ class CadFuncionariosContent:
         # self.tree_main.column("#0", width=125, anchor=tk.N)
         self.tree_main.column("id", width=125, anchor=tk.N)
         self.tree_main.column("Nome", width=125, anchor=tk.N)
-        self.tree_main.column("CNPJ", width=125, anchor=tk.N)
         self.tree_main.column("Telefone", width=125, anchor=tk.N)
+        self.tree_main.column("CNPJ", width=125, anchor=tk.N)
         self.tree_main.column("CodGrupo", width=125, anchor=tk.N)
 
-        # self.tree_main.heading("#0", text='label', anchor=tk.W)
         self.tree_main.heading("id", text="ID")
         self.tree_main.heading("Nome", text="Nome Cliente")
-        self.tree_main.heading("CNPJ", text=" CNPJ/CPF")
-        self.tree_main.heading("Telefone", text="Telefone")
+        self.tree_main.heading("Telefone", text=" CNPJ/CPF")
+        self.tree_main.heading("CNPJ", text="Telefone")
         self.tree_main.heading("CodGrupo", text="Cód. Grupo")
 
         self.refresh_tree()
@@ -247,9 +247,16 @@ class CadFuncionariosContent:
                 self.tree_main.delete(i)
 
             # Adicionando todos os clientes existentes
-
+            listCliente = []
+            idx = 0
             for row in rows:
-                self.tree_main.insert(parent='', index='end', iid=row[0], text='', values=(row[0], row[1], row[2], row[3], row[4]))
+                listCliente.insert(idx, Cliente(id=row[0], nome=row[1], telefone=row[2], cnpj_cpf=row[3], cod_grupo=row[4]))
+                self.tree_main.insert(parent='', index='end', iid=idx, text='', values=(listCliente[idx].get_id(),
+                                                                                        listCliente[idx].get_nome(),
+                                                                                        listCliente[idx].get_telefone(),
+                                                                                        listCliente[idx].get_cnpj_cpf(),
+                                                                                        listCliente[idx].get_cod_grupo()))
+                idx+=1
                 pass
 
             conn.close()

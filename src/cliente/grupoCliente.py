@@ -3,10 +3,8 @@ class GrupoCliente:
     __nome_grupo = None
     __cod_cliente_pai = None
 
-    def __init__(self, cod_grupo, nome_grupo, cod_cliente_pai):
+    def __init__(self, cod_grupo):
         self.__cod_grupo = cod_grupo
-        self.__nome_grupo = nome_grupo
-        self.__cod_cliente_pai = cod_cliente_pai
         pass
 
     def set_cod_grupo(self, cod_grupo):
